@@ -11,27 +11,21 @@ class ProductController extends ActiveController
 {
     public $modelClass = "app\models\Product";
 
-    public function behaviors(): array
+    public function behaviors()
     {
+
         $behaviors = parent::behaviors();
 
-        $behaviors['compositeAuth'] = [
-            'class' => \yii\filters\auth\CompositeAuth::class,
-            'authMethods' => [
-                \yii\filters\auth\QueryParamAuth::class,
-                \yii\filters\auth\HttpBasicAuth::class,
-
-            ]
-        ];
-
-        /*
         $behaviors['authenticator'] = [
-            // 'class' => \yii\filters\auth\HttpBearerAuth::class,
-            // 'class' => \yii\filters\auth\HttpBasicAuth::class,
-            // 'class' => \yii\filters\auth\QueryParamAuth::class,
-            // 'tokenParam' => 'API_KEY',
-        ]; */
+            'class' => \yii\filters\auth\HttpBearerAuth::class,
+            'except' => ['test'],
+        ];
         return $behaviors;
+    }
+
+    public function actionTest(): array
+    {
+        return ['message' => 'Hello World!'];
     }
 
 }
