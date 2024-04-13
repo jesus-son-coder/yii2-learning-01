@@ -10,5 +10,19 @@ use yii\rest\ActiveController;
 class ProductController extends ActiveController
 {
     public $modelClass = "app\models\Product";
+
+    public function behaviors(): array
+    {
+        $behaviors = parent::behaviors();
+
+        $behaviors['authenticator'] = [
+            // 'class' => \yii\filters\auth\HttpBearerAuth::class,
+            // 'class' => \yii\filters\auth\HttpBasicAuth::class,
+            'class' => \yii\filters\auth\QueryParamAuth::class,
+            'tokenParam' => 'API_KEY',
+        ];
+        return $behaviors;
+    }
+
 }
 
