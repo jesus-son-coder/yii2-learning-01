@@ -18,8 +18,9 @@ class ProductController extends ActiveController
 
         $behaviors['authenticator'] = [
             'class' => \yii\filters\auth\HttpBearerAuth::class,
-            'except' => ['test'],
-            'optional' => ['hello']
+            /* 'except' => ['test'],
+            'optional' => ['hello'], */
+            'only' => ['test']
         ];
         return $behaviors;
     }
