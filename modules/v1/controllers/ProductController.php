@@ -19,6 +19,7 @@ class ProductController extends ActiveController
         $behaviors['authenticator'] = [
             'class' => \yii\filters\auth\HttpBearerAuth::class,
             'except' => ['test'],
+            'optional' => ['hello']
         ];
         return $behaviors;
     }
@@ -26,6 +27,11 @@ class ProductController extends ActiveController
     public function actionTest(): array
     {
         return ['message' => 'Hello World!'];
+    }
+
+    public function actionHello(): array
+    {
+        return ['message' => 'Another Hello World!'];
     }
 
 }
