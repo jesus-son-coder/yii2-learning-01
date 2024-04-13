@@ -15,12 +15,22 @@ class ProductController extends ActiveController
     {
         $behaviors = parent::behaviors();
 
+        $behaviors['compositeAuth'] = [
+            'class' => \yii\filters\auth\CompositeAuth::class,
+            'authMethods' => [
+                \yii\filters\auth\QueryParamAuth::class,
+                \yii\filters\auth\HttpBasicAuth::class,
+
+            ]
+        ];
+
+        /*
         $behaviors['authenticator'] = [
             // 'class' => \yii\filters\auth\HttpBearerAuth::class,
             // 'class' => \yii\filters\auth\HttpBasicAuth::class,
-            'class' => \yii\filters\auth\QueryParamAuth::class,
-            'tokenParam' => 'API_KEY',
-        ];
+            // 'class' => \yii\filters\auth\QueryParamAuth::class,
+            // 'tokenParam' => 'API_KEY',
+        ]; */
         return $behaviors;
     }
 
