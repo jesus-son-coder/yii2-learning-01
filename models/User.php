@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
@@ -21,7 +22,7 @@ use yii\web\IdentityInterface;
  * @property int $created_at
  * @property int $updated_at
  */
-class User extends \yii\db\ActiveRecord implements IdentityInterface
+class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_INACTIVE = 9;
@@ -86,7 +87,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      * Null should be returned if such an identity cannot be found
      * or the identity is not in an active state (disabled, deleted, etc.)
      */
-    public static function findIdentity($id)
+    public static function findIdentity($id): User|IdentityInterface|null
     {
         return static::findOne($id);
     }
@@ -99,7 +100,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      * Null should be returned if such an identity cannot be found
      * or the identity is not in an active state (disabled, deleted, etc.)
      */
-    public static function findIdentityByAccessToken($token, $type = null)
+    public static function findIdentityByAccessToken($token, $type = null): User|IdentityInterface|null
     {
         return static::findOne(['auth_key' => $token]);
     }
@@ -186,7 +187,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      * Make sure to invalidate earlier issued authKeys when you implement force user logout, password change and
      * other scenarios, that require forceful access revocation for old sessions.
      *
-     * @return string|null a key that is used to check the validity of a given identity ID.
+     * @return string a key that is used to check the validity of a given identity ID.
      */
     public function getAuthKey(): string
     {
@@ -197,7 +198,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      * Validates the given auth key.
      *
      * @param string $authKey the given auth key
-     * @return bool|null whether the given auth key is valid.
+     * @return bool whether the given auth key is valid.
      */
     public function validateAuthKey($authKey): bool
     {
@@ -216,10 +217,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     /**
      * Generates password hash from password and sets it to the model
+     * @param $password
      * @return void
      * @throws Exception
      */
-    public function setPassword($password)
+    public function setPassword($password): void
     {
         $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
@@ -229,7 +231,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      * @return void
      * @throws Exception
      */
-    public function generateAuthKey()
+    public function generateAuthKey(): void
     {
         $this->auth_key = Yii::$app->security->generateRandomString();
     }
@@ -239,7 +241,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      * @return void
      * @throws Exception
      */
-    public function generatePasswordResetToken()
+    public function generatePasswordResetToken(): void
     {
         $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
     }
@@ -249,7 +251,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      * @return void
      * @throws Exception
      */
-    public function generateEmailVerificationToken()
+    public function generateEmailVerificationToken(): void
     {
         $this->verification_token = Yii::$app->security->generateRandomString() . '_' . time();
     }
@@ -258,7 +260,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      * Removes password reset token
      * @return void
      */
-    public function removePasswordResetToken()
+    public function removePasswordResetToken(): void
     {
         $this->password_reset_token = null;
     }
